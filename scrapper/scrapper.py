@@ -12,19 +12,19 @@ driver = webdriver.Chrome("chromedriver.exe")
 products=[] #List to store name of the product
 prices=[] #List to store price of the product
 ratings=[] #List to store rating of the product
-driver.get("https://www.clarionlist.com/")
+driver.get("https://www.amazon.com/s?k=laptops&page=1")
 content = driver.page_source
 soup = BeautifulSoup(content)
 #for a in soup.findAll('a',href=True, attrs={'class':'_31qSD5'}):
-for a in soup.findAll('a',href=True):
-    print(a.text)
-    #name=a.find('div', attrs={'class':'_3wU53n'})
-    #price=a.find('div', attrs={'class':'_1vC4OE _2rQ-NK'})
-    #rating=a.find('div', attrs={'class':'hGSR34 _2beYZw'})
-    #products.append(name.text)
-    prices=""
-    prices.append(a.text)
-   # ratings.append(rating.text)
+for d in soup.findAll('div', attrs={'class':'sg-col-4-of-12 sg-col-8-of-16 sg-col-12-of-20 sg-col'}):
+    name = d.find('span', attrs={'class':'a-size-medium a-color-base a-text-normal'})
+    price = d.find('span', attrs={'class':'a-offscreen'})
+    rating = d.find('span', attrs={'class':'a-icon-alt'})
+    if name is not None:
+        products.append(name.text)
+    if rating is not None:
+        rating.append(rating.text)   
+    
     #df = pd.DataFrame({'Product Name':products,'Price':prices,'Rating':"ss"})
-    df = pd.DataFrame({'Link':prices})
-    df.to_csv('link.csv', index=False, encoding='utf-8')
+df = pd.DataFrame({'Product Name':products})
+df.to_csv('products.csv', index=False, encoding='utf-8')
